@@ -1,5 +1,6 @@
 # Python virtual environment
 venv/
+smartai-venv/
 
 # Environment variables
 backend/.env
