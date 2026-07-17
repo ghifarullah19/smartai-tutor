@@ -1,0 +1,102 @@
+@reference "tailwindcss";
+
+.bubble-container {
+  @apply flex gap-4 w-full p-4 border-b border-slate-200/50 dark:border-slate-900/50 hover:bg-slate-100/30 dark:hover:bg-slate-900/20 transition-colors duration-150;
+}
+
+.bubble-user {
+  @apply bg-slate-100/55 dark:bg-slate-900/40;
+}
+
+.bubble-bot {
+  @apply bg-white/40 dark:bg-slate-950/20;
+}
+
+.avatar-wrapper {
+  @apply shrink-0;
+}
+
+.content-wrapper {
+  @apply flex flex-col gap-1 w-full overflow-hidden;
+}
+
+.sender-info {
+  @apply flex items-center gap-2 select-none;
+}
+
+.sender-name {
+  @apply text-sm font-semibold text-slate-800 dark:text-slate-200;
+}
+
+.message-time {
+  @apply text-xs text-slate-500;
+}
+
+.message-body {
+  @apply text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed;
+}
+
+.user-text {
+  @apply whitespace-pre-wrap break-words;
+}
+
+.bot-text {
+  @apply break-words;
+}
+
+/* Custom styling for rendered markdown content in bot-text */
+.bot-text p {
+  @apply mb-3 last:mb-0;
+}
+
+.bot-text ul {
+  @apply list-disc pl-5 mb-3;
+}
+
+.bot-text ol {
+  @apply list-decimal pl-5 mb-3;
+}
+
+.bot-text li {
+  @apply mb-1.5 last:mb-0;
+}
+
+.bot-text pre {
+  @apply bg-slate-950 p-4 rounded-xl overflow-x-auto my-3 border border-slate-800/80;
+}
+
+.bot-text code {
+  @apply bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded-md text-emerald-600 dark:text-emerald-400 font-mono text-sm border border-slate-200 dark:border-slate-800/50;
+}
+
+.bot-text pre code {
+  @apply bg-transparent p-0 text-slate-200 border-none font-mono text-sm leading-normal;
+}
+
+.bot-text blockquote {
+  @apply border-l-4 border-emerald-500 pl-4 italic text-slate-500 dark:text-slate-400 my-3;
+}
+
+.bot-text h1, .bot-text h2, .bot-text h3, .bot-text h4 {
+  @apply font-bold text-slate-800 dark:text-slate-100 mt-4 mb-2 select-none;
+}
+
+.bot-text h1 { @apply text-xl; }
+.bot-text h2 { @apply text-lg; }
+.bot-text h3 { @apply text-base; }
+
+.bot-text a {
+  @apply text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 underline underline-offset-2;
+}
+
+.bot-text table {
+  @apply w-full border-collapse my-3 text-sm;
+}
+
+.bot-text th {
+  @apply bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2 text-left font-semibold text-slate-700 dark:text-slate-200;
+}
+
+.bot-text td {
+  @apply border border-slate-200 dark:border-slate-800/80 p-2 text-slate-600 dark:text-slate-300;
+}

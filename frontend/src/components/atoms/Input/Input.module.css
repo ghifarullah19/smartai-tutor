@@ -1,0 +1,9 @@
+@reference "tailwindcss";
+
+.input-field {
+  @apply w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 rounded-lg px-3 py-2 outline-none transition-all duration-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500;
+}
+
+.input-field:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}

@@ -1,0 +1,73 @@
+@reference "tailwindcss";
+
+.sidebar {
+  @apply fixed top-0 bottom-0 left-0 z-40 flex flex-col w-[260px] bg-white/60 border-r border-slate-200/50 dark:bg-slate-950/60 dark:border-slate-800/50 backdrop-blur-2xl transform -translate-x-full md:translate-x-0 md:relative md:bg-white/40 md:dark:bg-slate-950/40 transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.02)] dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)];
+}
+
+.sidebar-open {
+  @apply translate-x-0;
+}
+
+.sidebar-header {
+  @apply flex items-center justify-between p-4 shrink-0;
+}
+
+.new-chat-btn {
+  @apply w-full justify-start py-2.5 px-4 text-sm font-medium;
+}
+
+.close-sidebar-btn {
+  @apply flex items-center justify-center p-2 rounded-lg text-slate-400 dark:text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-900 hover:text-slate-800 dark:hover:text-slate-100 md:hidden ml-2;
+}
+
+.search-wrapper {
+  @apply px-4 py-2 shrink-0;
+}
+
+.chat-list-container {
+  @apply flex flex-col flex-1 min-h-0 px-2 py-4 overflow-hidden;
+}
+
+.list-title {
+  @apply px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 select-none;
+}
+
+.chat-list {
+  @apply flex-1 overflow-y-auto px-1 space-y-1;
+}
+
+.empty-list {
+  @apply px-3 py-4 text-center text-sm text-slate-500 italic select-none;
+}
+
+.chat-item {
+  @apply relative flex items-center gap-3 px-3 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer select-none transition-all duration-150;
+}
+
+.chat-item-active {
+  @apply bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 border border-slate-200/40 dark:border-slate-800/40 font-semibold shadow-sm;
+}
+
+.chat-icon {
+  @apply text-slate-400 dark:text-slate-500 shrink-0 group-hover:text-slate-700 dark:group-hover:text-slate-300;
+}
+
+.chat-title {
+  @apply flex-1 text-sm truncate pr-6;
+}
+
+.delete-btn {
+  @apply absolute right-2 opacity-0 group-hover:opacity-100 p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-all duration-150;
+}
+
+.chat-item-active .delete-btn {
+  @apply opacity-70 hover:opacity-100;
+}
+
+.sidebar-footer {
+  @apply p-4 border-t border-slate-200/50 dark:border-slate-900 shrink-0;
+}
+
+.settings-btn {
+  @apply flex items-center w-full px-3 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 rounded-lg hover:bg-slate-200/40 dark:hover:bg-slate-900/50 transition-colors duration-150;
+}

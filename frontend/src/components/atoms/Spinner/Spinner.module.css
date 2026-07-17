@@ -1,0 +1,17 @@
+@reference "tailwindcss";
+
+.spinner-container {
+  @apply flex items-center justify-center;
+}
+
+.spinner-ring {
+  @apply rounded-full border-2 border-slate-200 dark:border-slate-700 border-t-emerald-500 animate-spin;
+}
+
+.spinner-sm {
+  @apply w-4 h-4;
+}
+
+.spinner-md {
+  @apply w-6 h-6;
+}

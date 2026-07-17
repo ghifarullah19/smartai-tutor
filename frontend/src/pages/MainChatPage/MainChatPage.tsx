@@ -1,0 +1,38 @@
+import React, { useEffect } from 'react';
+import { useChatStore } from '../../store/chatStore';
+import { AppShell } from '../../components/templates/AppShell';
+import { Sidebar } from '../../components/organisms/Sidebar';
+import { ChatArea } from '../../components/organisms/ChatArea';
+import { SettingsModal } from '../../components/organisms/SettingsModal';
+import { SplashScreen } from '../../components/organisms/SplashScreen';
+import styles from './MainChatPage.module.css';
+
+export const MainChatPage: React.FC = () => {
+  const { chats, initUserId, createNewChat, isAppLoading } = useChatStore();
+
+  useEffect(() => {
+    // Inisialisasi ID Pengguna saat halaman dimuat
+    initUserId();
+  }, [initUserId]);
+
+  useEffect(() => {
+    // Jika tidak ada riwayat obrolan sama sekali, buat sesi obrolan baru secara otomatis
+    if (!isAppLoading && chats.length === 0) {
+      createNewChat();
+    }
+  }, [chats, createNewChat, isAppLoading]);
+
+  if (isAppLoading) {
+    return <SplashScreen />;
+  }
+
+  return (
+    <div className={styles['page-container']}>
+      <AppShell
+        sidebar={<Sidebar />}
+        content={<ChatArea />}
+      />
+      <SettingsModal />
+    </div>
+  );
+};

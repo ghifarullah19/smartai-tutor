@@ -1,0 +1,1 @@
+export { MainChatPage } from './MainChatPage';
