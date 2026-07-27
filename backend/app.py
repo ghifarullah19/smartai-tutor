@@ -1,28 +1,50 @@
 import os
-import google.generativeai as genai
-from flask import Flask, request, jsonify
 from dotenv import load_dotenv
-from flask_cors import CORS # Ini penting untuk komunikasi frontend-backend
-from google.api_core.exceptions import ResourceExhausted
-
-# Muat variabel lingkungan dari .env
+# Muat variabel lingkungan dari .env sedini mungkin
 load_dotenv()
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS # Ini penting untuk komunikasi frontend-backend
+from werkzeug.utils import secure_filename
+from rag import process_document, generate_answer
 
 # Inisialisasi Flask App
 app = Flask(__name__)
 # Aktifkan CORS untuk mengizinkan permintaan dari frontend
 CORS(app) 
 
-# Konfigurasi Google Gemini API
-# Pastikan variabel lingkungan GOOGLE_API_KEY sudah diatur di file .env
-API_KEY = os.getenv("GOOGLE_API_KEY")
-if not API_KEY:
-    raise ValueError("GOOGLE_API_KEY tidak ditemukan di variabel lingkungan. Pastikan sudah diatur di file .env")
+# Konfigurasi Upload
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-genai.configure(api_key=API_KEY)
 
-# Inisialisasi model Generative AI default (tanpa instruksi kustom)
-default_model = genai.GenerativeModel('gemini-2.5-flash')
+
+# Konfigurasi Groq API
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    raise ValueError("GROQ_API_KEY tidak ditemukan di variabel lingkungan. Pastikan sudah diatur di file .env")
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({"error": "Tidak ada file yang dikirim"}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "Nama file kosong"}), 400
+        
+    if file:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        try:
+            process_document(filepath)
+            os.remove(filepath)
+            return jsonify({"message": f"File {filename} berhasil diproses dan disimpan ke knowledge base."})
+        except Exception as e:
+            if os.path.exists(filepath):
+                os.remove(filepath)
+            return jsonify({"error": str(e)}), 500
 
 # Endpoint untuk chatbot
 @app.route('/ask', methods=['POST'])
@@ -57,21 +79,17 @@ def ask_gemini():
                 "(gunakan $...$ untuk rumus sebaris/inline, dan $$...$$ untuk rumus blok terpisah)."
             )
 
-        # Inisialisasi model dengan instruksi sistem kustom per permintaan
-        req_model = genai.GenerativeModel('gemini-2.5-flash-lite', system_instruction=system_instruction)
-
-        # Kirim pertanyaan ke model Gemini
-        response = req_model.generate_content(user_question)
-        ai_response = response.text
+        # Dapatkan jawaban menggunakan modul RAG
+        ai_response = generate_answer(user_question, system_instruction)
 
         print(f"[{user_id}] Jawaban AI sukses diproses.") # Log status sukses
 
         return jsonify({"answer": ai_response})
-    except ResourceExhausted as e:
-        print(f"Gemini API Rate Limit exceeded: {e}")
-        return jsonify({"error": "Batas pengiriman pesan terlampaui. PintarAI sedang menerima terlalu banyak pertanyaan. Harap tunggu beberapa saat sebelum mengirim pesan lagi."}), 429
     except Exception as e:
-        print(f"Error saat memanggil Gemini API: {e}")
+        print(f"Error saat memproses pertanyaan: {e}")
+        error_msg = str(e)
+        if "rate_limit_exceeded" in error_msg.lower() or "429" in error_msg:
+            return jsonify({"error": "Batas penggunaan API terlampaui. Harap tunggu beberapa saat sebelum mencoba lagi."}), 429
         return jsonify({"error": "Terjadi kesalahan saat memproses pertanyaan Anda."}), 500
 
 # Endpoint sederhana untuk testing apakah backend berjalan

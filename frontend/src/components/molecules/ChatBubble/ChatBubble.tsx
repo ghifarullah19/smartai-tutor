@@ -2,6 +2,8 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import type { IMessage } from '../../../types/chat';
 import { Avatar } from '../../../components/atoms/Avatar';
 import { Skeleton } from '../../../components/atoms/Skeleton';
@@ -12,6 +14,14 @@ export interface IChatBubbleProps {
   message?: IMessage;
   isLoading?: boolean;
 }
+
+const preprocessLaTeX = (text: string) => {
+  let processedText = text.replace(/\\\[/g, '$$');
+  processedText = processedText.replace(/\\\]/g, '$$');
+  processedText = processedText.replace(/\\\(/g, '$');
+  processedText = processedText.replace(/\\\)/g, '$');
+  return processedText;
+};
 
 export const ChatBubble: React.FC<IChatBubbleProps> = ({ message, isLoading = false }) => {
   if (isLoading) {
@@ -63,10 +73,10 @@ export const ChatBubble: React.FC<IChatBubbleProps> = ({ message, isLoading = fa
           ) : (
             <div className={styles['bot-text']}>
               <ReactMarkdown
-                remarkPlugins={[remarkMath]}
-                rehypePlugins={[rehypeKatex]}
+                remarkPlugins={[remarkMath, remarkGfm]}
+                rehypePlugins={[rehypeRaw, rehypeKatex]}
               >
-                {message.text}
+                {preprocessLaTeX(message.text)}
               </ReactMarkdown>
             </div>
           )}

@@ -1,4 +1,15 @@
 Flask
 Flask-Cors
-google-generativeai
 python-dotenv
+langchain
+langchain-groq
+langchain-chroma
+langchain-huggingface
+langchain-text-splitters
+sentence-transformers
+chromadb
+pypdf
+python-docx
+pandas
+openpyxl
+werkzeug
