@@ -13,3 +13,5 @@ python-docx
 pandas
 openpyxl
 werkzeug
+Flask-SQLAlchemy
+PyJWT

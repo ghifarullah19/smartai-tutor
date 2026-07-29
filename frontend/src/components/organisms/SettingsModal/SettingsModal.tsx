@@ -1,11 +1,13 @@
 import React from 'react';
 import { X, Trash2, ShieldAlert, Sun, Moon } from 'lucide-react';
 import { useChatStore } from '../../../store/chatStore';
+import { useAuthStore } from '../../../store/authStore';
 import { Button } from '../../atoms/Button';
 import styles from './SettingsModal.module.css';
 
 export const SettingsModal: React.FC = () => {
   const { isSettingsOpen, toggleSettings, clearAllData, theme, toggleTheme } = useChatStore();
+  const { token, logout } = useAuthStore();
 
   if (!isSettingsOpen) return null;
 
@@ -19,9 +21,33 @@ export const SettingsModal: React.FC = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm(
+      'Apakah Anda yakin ingin menghapus akun Anda secara permanen? Semua data Anda akan hilang.'
+    );
+    if (confirmDelete) {
+      try {
+        const response = await fetch('http://localhost:5000/account', {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error || 'Gagal menghapus akun');
+        }
+        alert('Akun berhasil dihapus.');
+        logout();
+      } catch (error: any) {
+        alert(error.message);
+      }
+    }
+  };
+
   return (
-    <div className={styles['modal-backdrop']} onClick={toggleSettings}>
-      <div className={styles['modal-container']} onClick={(e) => e.stopPropagation()}>
+    <div className={styles['overlay']} onClick={toggleSettings}>
+      <div className={styles['modal']} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className={styles['modal-header']}>
           <h2 className={styles['modal-title']}>Pengaturan Aplikasi</h2>
@@ -62,15 +88,35 @@ export const SettingsModal: React.FC = () => {
               <div className={styles['data-info']}>
                 <ShieldAlert className={styles['alert-icon']} size={24} />
                 <div className={styles['info-text']}>
-                  <h3 className={styles['info-title']}>Hapus Riwayat & Pengaturan</h3>
+                  <h3 className={styles['info-title']}>Hapus Riwayat</h3>
                   <p className={styles['info-desc']}>
-                    Menghapus seluruh percakapan yang disimpan pada browser Anda (`localStorage`) dan mereset ID sesi.
+                    Menghapus seluruh percakapan yang disimpan secara lokal di browser Anda.
                   </p>
                 </div>
               </div>
               <Button onClick={handleClearData} variant="secondary" className={styles['clear-btn']}>
                 <Trash2 size={16} className="mr-2" />
                 Hapus Semua Data
+              </Button>
+            </div>
+          </div>
+
+          {/* Delete Account */}
+          <div className={styles['settings-group']}>
+            <span className={styles['group-label']}>Akun Pengguna</span>
+            <div className={styles['data-settings']}>
+              <div className={styles['data-info']}>
+                <ShieldAlert className={styles['alert-icon']} size={24} style={{ color: '#ef4444' }} />
+                <div className={styles['info-text']}>
+                  <h3 className={styles['info-title']}>Hapus Akun Permanen</h3>
+                  <p className={styles['info-desc']}>
+                    Semua data profil Anda di server akan dihapus secara permanen.
+                  </p>
+                </div>
+              </div>
+              <Button onClick={handleDeleteAccount} variant="secondary" className={styles['clear-btn']} style={{ borderColor: '#ef4444', color: '#ef4444' }}>
+                <Trash2 size={16} className="mr-2" />
+                Hapus Akun
               </Button>
             </div>
           </div>

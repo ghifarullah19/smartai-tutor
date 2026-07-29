@@ -1,6 +1,7 @@
 import React from 'react';
-import { Plus, Trash2, Settings, X, MessageSquare } from 'lucide-react';
+import { Plus, Trash2, Settings, X, MessageSquare, LogOut } from 'lucide-react';
 import { useChatStore } from '../../../store/chatStore';
+import { useAuthStore } from '../../../store/authStore';
 import { Button } from '../../atoms/Button';
 import { SearchBar } from '../../molecules/SearchBar';
 import styles from './Sidebar.module.css';
@@ -18,6 +19,8 @@ export const Sidebar: React.FC = () => {
     toggleSidebar,
     toggleSettings,
   } = useChatStore();
+
+  const logout = useAuthStore((state) => state.logout);
 
   const filteredChats = chats.filter((chat) =>
     chat.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -76,6 +79,10 @@ export const Sidebar: React.FC = () => {
         <button onClick={toggleSettings} className={styles['settings-btn']}>
           <Settings size={16} className="mr-2" />
           Pengaturan
+        </button>
+        <button onClick={logout} className={styles['settings-btn']} style={{ marginTop: '0.5rem', color: '#ef4444' }}>
+          <LogOut size={16} className="mr-2" />
+          Keluar
         </button>
       </div>
     </aside>
