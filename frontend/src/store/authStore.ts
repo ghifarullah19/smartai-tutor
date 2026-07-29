@@ -13,6 +13,7 @@ export interface IAuthState {
   token: string | null;
   login: (user: IUser, token: string) => void;
   logout: () => void;
+  updateUser: (updates: Partial<IUser>) => void;
 }
 
 export const useAuthStore = create<IAuthState>()(
@@ -25,6 +26,10 @@ export const useAuthStore = create<IAuthState>()(
         set({ isAuthenticated: true, user, token }),
       logout: () =>
         set({ isAuthenticated: false, user: null, token: null }),
+      updateUser: (updates) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...updates } : null,
+        })),
     }),
     {
       name: 'auth-storage', // nama key di localStorage

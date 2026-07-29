@@ -1,0 +1,22 @@
+# Profile Management Tasks
+
+- [x] Task 1: Update `authStore.ts` and `chatStore.ts`
+  - Add `isProfileOpen` and `toggleProfile` in `chatStore`.
+  - Add `updateUser(userData)` in `authStore`.
+- [x] Task 2: Create `ProfileModal` Component
+  - Scaffold `ProfileModal.tsx` similar to `SettingsModal`.
+  - Add form inputs for Name, Email, Password.
+  - Implement form submission logic for `PUT /account`.
+- [x] Task 3: Move "Delete Account" Logic
+  - Migrate the "Hapus Akun Permanen" button and API call from `SettingsModal` to `ProfileModal`.
+- [x] Task 4: Update `ProfileMenu` Component
+  - Add "Profil Saya" button.
+  - Connect it to `toggleProfile`.
+- [x] Task 5: Implement Backend `PUT /account` Route
+  - Update `app.py` to add `PUT /account` route.
+  - Handle updating `name`, `email`, and `password_hash` with `werkzeug.security.generate_password_hash`.
+  - Return updated user data in JSON response.
+- [x] Task 6: Testing & Verification
+  - Verify UI opens properly.
+  - Verify profile updates save to the DB and reflect in UI.
+  - Verify account deletion still works.

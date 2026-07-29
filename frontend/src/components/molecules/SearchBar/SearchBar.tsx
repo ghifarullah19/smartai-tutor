@@ -1,7 +1,6 @@
 import React from 'react';
 import { Search } from 'lucide-react';
 import { Input } from '../../atoms/Input';
-import styles from './SearchBar.module.css';
 
 export interface ISearchBarProps {
   value: string;
@@ -15,13 +14,13 @@ export const SearchBar: React.FC<ISearchBarProps> = ({
   placeholder = 'Cari chat...',
 }) => {
   return (
-    <div className={styles['search-container']}>
-      <Search className={styles['search-icon']} size={16} />
+    <div className={"relative w-full flex items-center"}>
+      <Search className={"absolute left-3 text-slate-500 pointer-events-none"} size={16} />
       <Input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={styles['search-input']}
+        className={"pl-9"}
       />
     </div>
   );

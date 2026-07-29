@@ -1,5 +1,1 @@
-@reference "tailwindcss";
-
-.page-container {
-  @apply w-full h-full relative overflow-hidden;
-}
+@reference "tailwindcss";

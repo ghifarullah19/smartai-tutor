@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './Spinner.module.css';
 
 export interface ISpinnerProps {
   size?: 'sm' | 'md';
@@ -7,12 +6,12 @@ export interface ISpinnerProps {
 
 export const Spinner: React.FC<ISpinnerProps> = ({ size = 'md' }) => {
   const getSizeClass = () => {
-    return size === 'sm' ? styles['spinner-sm'] : styles['spinner-md'];
+    return size === 'sm' ? "w-4 h-4" : "w-6 h-6";
   };
 
   return (
-    <div className={styles['spinner-container']}>
-      <div className={`${styles['spinner-ring']} ${getSizeClass()}`}></div>
+    <div className={"flex items-center justify-center"}>
+      <div className={`${"rounded-full border-2 border-slate-200 dark:border-slate-700 border-t-emerald-500 animate-spin"} ${getSizeClass()}`}></div>
     </div>
   );
 };

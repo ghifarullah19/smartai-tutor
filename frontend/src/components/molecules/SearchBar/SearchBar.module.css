@@ -1,13 +1,1 @@
-@reference "tailwindcss";
-
-.search-container {
-  @apply relative w-full flex items-center;
-}
-
-.search-icon {
-  @apply absolute left-3 text-slate-500 pointer-events-none;
-}
-
-.search-input {
-  @apply pl-9;
-}
+@reference "tailwindcss";

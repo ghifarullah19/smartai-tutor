@@ -97,16 +97,50 @@ def signup():
     
     return jsonify({"message": "Pendaftaran berhasil, silakan login"}), 201
 
-@app.route('/account', methods=['DELETE'])
+@app.route('/account', methods=['PUT', 'DELETE'])
 @token_required
-def delete_account(current_user):
-    try:
-        db.session.delete(current_user)
-        db.session.commit()
-        return jsonify({"message": "Akun berhasil dihapus"}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": f"Gagal menghapus akun: {str(e)}"}), 500
+def manage_account(current_user):
+    if request.method == 'DELETE':
+        try:
+            db.session.delete(current_user)
+            db.session.commit()
+            return jsonify({"message": "Akun berhasil dihapus"}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": f"Gagal menghapus akun: {str(e)}"}), 500
+            
+    if request.method == 'PUT':
+        data = request.get_json()
+        
+        # Update Name
+        if 'name' in data and data['name'].strip():
+            current_user.name = data['name'].strip()
+            
+        # Update Email
+        if 'email' in data and data['email'].strip():
+            # Check if email is already taken by someone else
+            existing_user = User.query.filter_by(email=data['email'].strip()).first()
+            if existing_user and existing_user.id != current_user.id:
+                return jsonify({"error": "Email sudah digunakan oleh akun lain"}), 400
+            current_user.email = data['email'].strip()
+            
+        # Update Password
+        if 'password' in data and data['password'].strip():
+            current_user.password_hash = generate_password_hash(data['password'])
+            
+        try:
+            db.session.commit()
+            return jsonify({
+                "message": "Profil berhasil diperbarui",
+                "user": {
+                    "id": current_user.id,
+                    "email": current_user.email,
+                    "name": current_user.name
+                }
+            }), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": f"Gagal memperbarui profil: {str(e)}"}), 500
 
 @app.route('/upload', methods=['POST'])
 def upload_file():

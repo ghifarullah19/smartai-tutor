@@ -1,9 +1,1 @@
-@reference "tailwindcss";
-
-.skeleton {
-  @apply animate-pulse bg-slate-200 dark:bg-slate-800 rounded-lg h-4 w-full;
-}
-
-.skeleton-circle {
-  @apply rounded-full;
-}
+@reference "tailwindcss";

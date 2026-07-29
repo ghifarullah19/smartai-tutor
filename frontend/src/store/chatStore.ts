@@ -10,6 +10,7 @@ export interface IChatState {
   searchQuery: string;
   isSidebarOpen: boolean;
   isSettingsOpen: boolean;
+  isProfileOpen: boolean;
   isLoading: boolean;
   userId: string;
   theme: 'light' | 'dark';
@@ -24,8 +25,10 @@ export interface IChatState {
   setSearchQuery: (query: string) => void;
   toggleSidebar: () => void;
   toggleSettings: () => void;
+  toggleProfile: () => void;
   clearAllData: () => void;
   toggleTheme: () => void;
+  setTheme: (theme: 'light' | 'dark') => void;
   setAppLoading: (loading: boolean) => void;
 }
 
@@ -37,6 +40,7 @@ export const useChatStore = create<IChatState>()(
       searchQuery: '',
       isSidebarOpen: false,
       isSettingsOpen: false,
+      isProfileOpen: false,
       isLoading: false,
       userId: '',
       theme: 'light',
@@ -44,13 +48,9 @@ export const useChatStore = create<IChatState>()(
 
       initUserId: () => {
         // Singkronkan kelas DOM root dari tema yang dipulihkan (hydrated)
-        const currentTheme = get().theme || 'light';
-        const root = window.document.documentElement;
-        if (currentTheme === 'dark') {
-          root.classList.add('dark');
-        } else {
-          root.classList.remove('dark');
-        }
+        const manualTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+        const currentTheme = manualTheme || get().theme || 'light';
+        get().setTheme(currentTheme);
 
         let storedId = localStorage.getItem('pintaraiUserId');
         if (!storedId) {
@@ -214,13 +214,9 @@ export const useChatStore = create<IChatState>()(
         set({ searchQuery: query });
       },
 
-      toggleSidebar: () => {
-        set((state) => ({ isSidebarOpen: !state.isSidebarOpen }));
-      },
-
-      toggleSettings: () => {
-        set((state) => ({ isSettingsOpen: !state.isSettingsOpen }));
-      },
+      toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+      toggleSettings: () => set((state) => ({ isSettingsOpen: !state.isSettingsOpen })),
+      toggleProfile: () => set((state) => ({ isProfileOpen: !state.isProfileOpen })),
 
       clearAllData: () => {
         set({
@@ -230,18 +226,21 @@ export const useChatStore = create<IChatState>()(
         });
       },
 
-      toggleTheme: () => {
-        const currentTheme = get().theme;
-        const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
+      setTheme: (theme: 'light' | 'dark') => {
         const root = window.document.documentElement;
-        if (nextTheme === 'dark') {
+        if (theme === 'dark') {
           root.classList.add('dark');
         } else {
           root.classList.remove('dark');
         }
-        
-        set({ theme: nextTheme });
+        localStorage.setItem('theme', theme);
+        set({ theme });
+      },
+
+      toggleTheme: () => {
+        const currentTheme = get().theme;
+        const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+        get().setTheme(nextTheme);
       },
 
       setAppLoading: (loading: boolean) => {

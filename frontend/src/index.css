@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Import KaTeX CSS for styling mathematical formulas */
 @import "katex/dist/katex.min.css";
@@ -8,8 +9,7 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #020617; /* bg-slate-950 default */
-  color: #f1f5f9; /* text-slate-100 default */
   font-family: 'Inter', sans-serif;
   overflow: hidden;
+  background-color: transparent;
 }

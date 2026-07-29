@@ -4,8 +4,8 @@ import { AppShell } from '../../components/templates/AppShell';
 import { Sidebar } from '../../components/organisms/Sidebar';
 import { ChatArea } from '../../components/organisms/ChatArea';
 import { SettingsModal } from '../../components/organisms/SettingsModal';
+import { ProfileModal } from '../../components/organisms/ProfileModal';
 import { SplashScreen } from '../../components/organisms/SplashScreen';
-import styles from './MainChatPage.module.css';
 
 export const MainChatPage: React.FC = () => {
   const { chats, initUserId, createNewChat, isAppLoading } = useChatStore();
@@ -27,12 +27,13 @@ export const MainChatPage: React.FC = () => {
   }
 
   return (
-    <div className={styles['page-container']}>
+    <div className={"w-full h-full relative overflow-hidden"}>
       <AppShell
         sidebar={<Sidebar />}
         content={<ChatArea />}
       />
       <SettingsModal />
+      <ProfileModal />
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './Avatar.module.css';
 
 export interface IAvatarProps {
   name?: string;
@@ -19,22 +18,22 @@ export const Avatar: React.FC<IAvatarProps> = ({
   const getSizeClass = () => {
     switch (size) {
       case 'sm':
-        return styles['avatar-sm'];
+        return "w-8 h-8";
       case 'md':
-        return styles['avatar-md'];
+        return "w-10 h-10";
       case 'lg':
-        return styles['avatar-lg'];
+        return "w-16 h-16";
       default:
-        return styles['avatar-md'];
+        return "w-10 h-10";
     }
   };
 
   return (
-    <div className={`${styles['avatar-container']} ${getSizeClass()}`}>
+    <div className={`${"flex items-center justify-center rounded-full bg-emerald-600 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden select-none shrink-0 shadow-sm backdrop-blur-xl"} ${getSizeClass()}`}>
       {src ? (
-        <img src={src} alt={name} className={styles['avatar-img']} />
+        <img src={src} alt={name} className={"w-full h-full object-cover"} />
       ) : (
-        <span className={styles['avatar-initials']}>{getInitials(name)}</span>
+        <span className={"text-white font-bold tracking-wider text-xs text-sm text-xl"}>{getInitials(name)}</span>
       )}
     </div>
   );

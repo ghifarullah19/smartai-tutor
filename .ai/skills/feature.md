@@ -62,7 +62,7 @@ If the user approves:
 
 Create:
 
-.kiro/specs/<feature-name>/
+.ai/specs/<feature-name>/
 
 with:
 

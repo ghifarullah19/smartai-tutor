@@ -1,34 +1,1 @@
-@reference "tailwindcss";
-
-.avatar-container {
-  @apply flex items-center justify-center rounded-full bg-emerald-600 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden select-none shrink-0 shadow-sm backdrop-blur-xl;
-}
-
-.avatar-img {
-  @apply w-full h-full object-cover;
-}
-
-.avatar-initials {
-  @apply text-white font-bold tracking-wider;
-}
-
-.avatar-sm {
-  @apply w-8 h-8;
-}
-.avatar-sm .avatar-initials {
-  @apply text-xs;
-}
-
-.avatar-md {
-  @apply w-10 h-10;
-}
-.avatar-md .avatar-initials {
-  @apply text-sm;
-}
-
-.avatar-lg {
-  @apply w-16 h-16;
-}
-.avatar-lg .avatar-initials {
-  @apply text-xl;
-}
+@reference "tailwindcss";.avatar-sm .avatar-md .avatar-lg 

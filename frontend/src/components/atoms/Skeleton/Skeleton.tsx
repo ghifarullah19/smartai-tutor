@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './Skeleton.module.css';
 
 export interface ISkeletonProps {
   className?: string;
@@ -21,7 +20,7 @@ export const Skeleton: React.FC<ISkeletonProps> = ({
   return (
     <div
       style={style}
-      className={`${styles['skeleton']} ${circle ? styles['skeleton-circle'] : ''} ${className}`}
+      className={`${"animate-pulse bg-slate-200 dark:bg-slate-800 rounded-lg h-4 w-full"} ${circle ? "rounded-full" : ''} ${className}`}
     />
   );
 };
