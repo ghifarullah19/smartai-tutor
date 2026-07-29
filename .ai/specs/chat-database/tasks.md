@@ -1,0 +1,23 @@
+# Chat Database Tasks
+
+- [x] Task 1: Update Backend Models
+  - Add `ChatSession` and `Message` models in `models.py`.
+  - Apply database migration/creation.
+- [x] Task 2: Implement REST Endpoints in `app.py`
+  - `GET /api/chats`
+  - `POST /api/chats`
+  - `GET /api/chats/<id>/messages`
+  - `DELETE /api/chats/<id>`
+- [x] Task 3: Refactor AI Integration (`POST /api/chats/<id>/ask`)
+  - Migrate logic from the old `/ask` endpoint to include `chat_id`.
+  - Fetch previous messages for the `chat_id` and pass them as history to Gemini.
+  - Save the new user message and the AI's response to the `Message` table.
+- [x] Task 4: Refactor Frontend State (`chatStore.ts`)
+  - Remove `localStorage` persist for chats.
+  - Implement async actions to call the new REST API (`fetchChats`, `createNewChat`, `fetchMessages`, `sendMessage`).
+- [x] Task 5: Update Frontend Components
+  - Ensure `Sidebar.tsx` maps over remote chats.
+  - Ensure `ChatArea.tsx` displays remote messages.
+- [x] Task 6: Testing & Verification
+  - Verify chat history persists across browser refreshes and different logins.
+  - Verify AI has memory of the conversation context.

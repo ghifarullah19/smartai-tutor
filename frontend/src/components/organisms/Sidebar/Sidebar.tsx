@@ -49,7 +49,7 @@ export const Sidebar: React.FC = () => {
                 <div
                   key={chat.id}
                   onClick={() => selectChat(chat.id)}
-                  className={`${"relative flex items-center gap-3 px-3 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer select-none transition-all duration-150"} ${isActive ? "bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 border border-slate-200/40 dark:border-slate-800/40 font-semibold shadow-sm" : ''}`}
+                  className={`group relative flex items-center gap-3 px-3 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-900/60 hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer select-none transition-all duration-150 ${isActive ? "bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 border border-slate-200/40 dark:border-slate-800/40 font-semibold shadow-sm" : ''}`}
                 >
                   <MessageSquare size={16} className={"text-slate-400 dark:text-slate-500 shrink-0 group-hover:text-slate-700 dark:group-hover:text-slate-300"} />
                   <span className={"flex-1 text-sm truncate pr-6"}>{chat.title}</span>

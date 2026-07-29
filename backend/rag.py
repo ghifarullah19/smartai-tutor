@@ -69,7 +69,7 @@ def process_document(file_path: str):
     # Menyimpan ke ChromaDB
     vector_store.add_documents(docs)
 
-def generate_answer(query: str, system_instruction: str) -> str:
+def generate_answer(query: str, system_instruction: str, history_str: str = "") -> str:
     """Melakukan pencarian konteks di ChromaDB dan mengirim ke Groq API."""
     # 1. Similarity Search
     results = vector_store.similarity_search(query, k=3)
@@ -81,10 +81,13 @@ def generate_answer(query: str, system_instruction: str) -> str:
 Berdasarkan konteks tambahan dari dokumen berikut (jika ada dan relevan):
 {context}
 
+Riwayat Percakapan Sebelumnya:
+{history_str}
+
 Jawablah pertanyaan dari user berikut:
 Pertanyaan: {query}
 
-(Catatan: Jika informasi relevan tidak ada di dalam konteks tambahan, abaikan konteks tersebut dan gunakan pengetahuanmu sendiri sebagai tutor untuk menjawab.)
+(Catatan: Jika informasi relevan tidak ada di dalam konteks tambahan, abaikan konteks tersebut dan gunakan pengetahuanmu sendiri sebagai tutor untuk menjawab. Juga perhatikan riwayat percakapan sebelumnya untuk menyambung konteks pembicaraan.)
 Jawaban:"""
     
     prompt = PromptTemplate.from_template(template)
@@ -94,6 +97,7 @@ Jawaban:"""
     response = chain.invoke({
         "system_instruction": system_instruction,
         "context": context,
+        "history_str": history_str,
         "query": query
     })
     

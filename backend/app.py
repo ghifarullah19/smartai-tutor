@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
 from rag import process_document, generate_answer
-from models import db, User
+from models import db, User, ChatSession, Message
 from auth_middleware import token_required
 
 # Inisialisasi Flask App
@@ -142,6 +142,86 @@ def manage_account(current_user):
             db.session.rollback()
             return jsonify({"error": f"Gagal memperbarui profil: {str(e)}"}), 500
 
+# --- Chat Endpoints ---
+
+@app.route('/api/chats', methods=['GET'])
+@token_required
+def get_chats(current_user):
+    chats = ChatSession.query.filter_by(user_id=current_user.id).order_by(ChatSession.updated_at.desc()).all()
+    result = []
+    for chat in chats:
+        result.append({
+            "id": chat.id,
+            "title": chat.title,
+            "subject": chat.subject,
+            "grade": chat.grade,
+            "created_at": chat.created_at.isoformat(),
+            "updated_at": chat.updated_at.isoformat()
+        })
+    return jsonify(result), 200
+
+@app.route('/api/chats', methods=['POST'])
+@token_required
+def create_chat(current_user):
+    data = request.get_json() or {}
+    new_chat = ChatSession(
+        user_id=current_user.id,
+        title=data.get('title', 'Obrolan Baru'),
+        subject=data.get('subject'),
+        grade=data.get('grade')
+    )
+    db.session.add(new_chat)
+    db.session.commit()
+    return jsonify({
+        "id": new_chat.id,
+        "title": new_chat.title,
+        "subject": new_chat.subject,
+        "grade": new_chat.grade,
+        "created_at": new_chat.created_at.isoformat(),
+        "updated_at": new_chat.updated_at.isoformat()
+    }), 201
+
+@app.route('/api/chats/<chat_id>', methods=['DELETE', 'PUT'])
+@token_required
+def modify_chat(current_user, chat_id):
+    chat = ChatSession.query.filter_by(id=chat_id, user_id=current_user.id).first()
+    if not chat:
+        return jsonify({"error": "Chat tidak ditemukan"}), 404
+        
+    if request.method == 'DELETE':
+        db.session.delete(chat)
+        db.session.commit()
+        return jsonify({"message": "Chat berhasil dihapus"}), 200
+        
+    if request.method == 'PUT':
+        data = request.get_json() or {}
+        if 'title' in data:
+            chat.title = data['title']
+        if 'subject' in data:
+            chat.subject = data['subject']
+        if 'grade' in data:
+            chat.grade = data['grade']
+        db.session.commit()
+        return jsonify({"message": "Chat berhasil diperbarui"}), 200
+
+@app.route('/api/chats/<chat_id>/messages', methods=['GET'])
+@token_required
+def get_messages(current_user, chat_id):
+    chat = ChatSession.query.filter_by(id=chat_id, user_id=current_user.id).first()
+    if not chat:
+        return jsonify({"error": "Chat tidak ditemukan"}), 404
+        
+    messages = Message.query.filter_by(chat_id=chat_id).order_by(Message.timestamp.asc()).all()
+    result = []
+    for msg in messages:
+        result.append({
+            "id": msg.id,
+            "sender": msg.sender,
+            "text": msg.text,
+            "timestamp": msg.timestamp.isoformat()
+        })
+    return jsonify(result), 200
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
@@ -164,18 +244,41 @@ def upload_file():
             return jsonify({"error": str(e)}), 500
 
 # Endpoint untuk chatbot
-@app.route('/ask', methods=['POST'])
-def ask_gemini():
+@app.route('/api/chats/<chat_id>/ask', methods=['POST'])
+@token_required
+def ask_gemini(current_user, chat_id):
+    chat = ChatSession.query.filter_by(id=chat_id, user_id=current_user.id).first()
+    if not chat:
+        return jsonify({"error": "Chat tidak ditemukan"}), 404
+
     data = request.get_json()
     user_question = data.get('question')
-    user_id = data.get('userId') # Ambil userId dari frontend
-    grade = data.get('grade') # Ambil grade (kelas) dari frontend
-    subject = data.get('subject') # Ambil subject (mata pelajaran) dari frontend
+    grade = data.get('grade') or chat.grade
+    subject = data.get('subject') or chat.subject
 
     if not user_question:
         return jsonify({"error": "Pertanyaan tidak boleh kosong"}), 400
 
-    print(f"[{user_id}] Menerima pertanyaan: {user_question} | Kelas: {grade} | Pelajaran: {subject}")
+    print(f"[{current_user.email}] Menerima pertanyaan di chat {chat_id}: {user_question}")
+
+    # Simpan pesan user ke database
+    user_msg = Message(chat_id=chat_id, sender='user', text=user_question)
+    db.session.add(user_msg)
+    
+    # Update updated_at di chat session
+    chat.updated_at = datetime.datetime.utcnow()
+    
+    # Ambil riwayat percakapan sebelumnya (batas 10 pesan terakhir agar konteks tidak terlalu besar)
+    past_messages = Message.query.filter_by(chat_id=chat_id).order_by(Message.timestamp.desc()).limit(10).all()
+    past_messages.reverse()
+    
+    history_str = ""
+    for msg in past_messages:
+        # Skip pesan user yang baru saja ditambahkan dari history (karena akan dikirim sebagai query utama)
+        if msg.id == user_msg.id:
+            continue
+        role = "Siswa" if msg.sender == 'user' else "Tutor AI"
+        history_str += f"{role}: {msg.text}\n"
 
     try:
         # Buat instruksi sistem berdasarkan masukan kelas dan mata pelajaran
@@ -196,12 +299,21 @@ def ask_gemini():
                 "(gunakan $...$ untuk rumus sebaris/inline, dan $$...$$ untuk rumus blok terpisah)."
             )
 
-        # Dapatkan jawaban menggunakan modul RAG
-        ai_response = generate_answer(user_question, system_instruction)
+        # Dapatkan jawaban menggunakan modul RAG dan riwayat
+        ai_response = generate_answer(user_question, system_instruction, history_str)
 
-        print(f"[{user_id}] Jawaban AI sukses diproses.") # Log status sukses
+        # Simpan pesan AI ke database
+        ai_msg = Message(chat_id=chat_id, sender='ai', text=ai_response)
+        db.session.add(ai_msg)
+        db.session.commit()
 
-        return jsonify({"answer": ai_response})
+        print(f"[{current_user.email}] Jawaban AI sukses diproses dan disimpan.") # Log status sukses
+
+        return jsonify({
+            "answer": ai_response,
+            "user_message_id": user_msg.id,
+            "ai_message_id": ai_msg.id
+        })
     except Exception as e:
         print(f"Error saat memproses pertanyaan: {e}")
         error_msg = str(e)
