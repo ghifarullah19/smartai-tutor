@@ -10,7 +10,7 @@ export const AppShell: React.FC<IAppShellProps> = ({ sidebar, content }) => {
   const { isSidebarOpen, toggleSidebar } = useChatStore();
 
   return (
-    <div className={"flex w-screen h-screen overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300"}>
+    <div className={"flex w-full h-screen h-[100dvh] overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300"}>
       {/* Sidebar Section */}
       {sidebar}
 

@@ -47,3 +47,14 @@ This document tracks all completed features, bug fixes, and refactoring efforts.
 **Summary of Changes:** 
 - **[BugFix] Vercel Bundle Size Optimization**: Menghapus dependensi PyTorch (`torch`), `sentence-transformers`, `langchain-huggingface`, `chromadb`, `pandas`, dan `openpyxl` dari `requirements.txt` yang menyebabkan ukuran bundle membengkak hingga 5.14 GB.
 - **[Refactor] Lightweight Groq Integration**: Mengubah `rag.py` untuk menggunakan API `ChatGroq` secara langsung tanpa memuat model embedding PyTorch lokal yang berat. Ukuran fungsi serverless sekarang turun drastis dari 5.14 GB menjadi ~30 MB (jauh di bawah batas Vercel 500 MB).
+
+### [2026-07-31] - [Type: BugFix]
+**Task/Objective:** Fix Navbar Layout Clipping and Profile Menu Z-Index Stacking Overlap Bugs
+**Files Modified:**
+- `frontend/src/App.tsx`
+- `frontend/src/components/templates/AppShell/AppShell.tsx`
+- `frontend/src/components/organisms/ChatArea/ChatArea.tsx`
+- `frontend/src/components/organisms/WelcomeForm/WelcomeForm.tsx`
+**Summary of Changes:** 
+- **[BugFix] Responsive Viewport Height**: Mengganti `h-screen` dengan `h-[100dvh]` pada `AppShell` dan `App` untuk mencegah penumpukan/pemotongan navbar atas di berbagai perangkat (khususnya browser mobile).
+- **[BugFix] Z-Index Stacking Context Fix**: Menambahkan `relative z-30` pada `<header>` di `ChatArea` dan `z-10` pada `WelcomeForm` sehingga menu dropdown `ProfileMenu` (`z-50`) dipastikan berada di lapisan paling atas dan tidak tertimpa lagi oleh kartu "Selamat Datang di PintarAI".

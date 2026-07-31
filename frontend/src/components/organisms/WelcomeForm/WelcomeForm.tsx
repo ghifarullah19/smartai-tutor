@@ -34,7 +34,7 @@ export const WelcomeForm: React.FC = () => {
   const isFormValid = selectedGrade !== null && selectedSubject !== null;
 
   return (
-    <div className={"flex-1 flex items-center justify-center p-4 md:p-8 overflow-y-auto w-full h-full bg-slate-50 dark:bg-slate-950 transition-colors duration-300"}>
+    <div className={"flex-1 flex items-center justify-center p-4 md:p-8 overflow-y-auto w-full h-full relative z-10 bg-slate-50 dark:bg-slate-950 transition-colors duration-300"}>
       <div className={"w-full max-w-2xl bg-white/50 dark:bg-slate-900/50 border border-white/40 dark:border-slate-700/50 rounded-3xl p-6 md:p-8 backdrop-blur-2xl shadow-2xl transition-colors duration-300"}>
         <div className={"flex flex-col items-center text-center mb-8 select-none"}>
           <div className={"flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-600 shadow-lg shadow-emerald-600/20 mb-4"}>

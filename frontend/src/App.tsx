@@ -20,7 +20,7 @@ function App() {
   }
 
   return (
-    <div className="relative w-full h-full min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <div className="relative w-full h-full min-h-screen min-h-[100dvh] bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Theme Toggle for Login/Signup */}
       <button 
         onClick={toggleTheme}

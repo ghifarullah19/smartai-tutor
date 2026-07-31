@@ -42,7 +42,7 @@ export const ChatArea: React.FC = () => {
   return (
     <div className={"flex-1 flex flex-col h-full bg-slate-50/50 dark:bg-slate-950/20 overflow-hidden relative"}>
       {/* Header (Always Visible) */}
-      <header className={"flex items-center justify-between px-6 py-4 border-b border-slate-200/50 dark:border-slate-800/50 bg-white/40 dark:bg-slate-950/50 backdrop-blur-xl shrink-0 select-none shadow-sm"}>
+      <header className={"relative z-30 flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-slate-200/50 dark:border-slate-800/50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl shrink-0 select-none shadow-sm"}>
         <div className={"flex items-center gap-3 w-full"}>
           <button onClick={toggleSidebar} className={"p-2 rounded-lg text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 hover:text-slate-700 dark:hover:text-slate-100 md:hidden"} aria-label="Buka menu">
             <Menu size={20} />
