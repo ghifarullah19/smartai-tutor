@@ -40,8 +40,8 @@ export const WelcomeForm: React.FC = () => {
           <div className={"flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-600 shadow-lg shadow-emerald-600/20 mb-4"}>
             <Sparkles className={"text-white"} size={24} />
           </div>
-          <h1 className={"text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2"}>Selamat Datang di PintarAI</h1>
-          <p className={"text-sm md:text-base text-slate-500 dark:text-slate-400 max-w-lg leading-relaxed"}>
+          <h1 className={"text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2"}>Selamat Datang di PintarAI</h1>
+          <p className={"text-xs md:text-base text-slate-500 dark:text-slate-400 max-w-lg leading-relaxed"}>
             Tutor virtual AI yang siap membantu belajarmu. Atur kurikulum agar penjelasan AI lebih sesuai dengan materi sekolahmu, atau langsung mengobrol sekarang.
           </p>
         </div>

@@ -49,7 +49,7 @@ export const ChatArea: React.FC = () => {
           </button>
           {activeChat ? (
             <div className={"flex flex-col gap-1"}>
-              <h2 className={"text-base md:text-lg font-bold text-slate-800 dark:text-slate-100 truncate max-w-xs sm:max-w-md"}>{activeChat.title}</h2>
+              <h2 className={"text-sm md:text-lg font-bold text-slate-800 dark:text-slate-100 truncate max-w-[180px] sm:max-w-md"}>{activeChat.title}</h2>
               {hasCurriculum ? (
                 <div className={"flex items-center bg-emerald-600/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs px-2 py-0.5 rounded-full font-medium w-fit"}>
                   <BookOpen size={12} className="mr-1" />
@@ -63,7 +63,7 @@ export const ChatArea: React.FC = () => {
             </div>
           ) : (
             <div className={"flex flex-col gap-1"}>
-              <h2 className={"text-base md:text-lg font-bold text-slate-800 dark:text-slate-100"}>PintarAI</h2>
+              <h2 className={"text-sm md:text-lg font-bold text-slate-800 dark:text-slate-100"}>PintarAI</h2>
             </div>
           )}
         </div>
@@ -78,7 +78,7 @@ export const ChatArea: React.FC = () => {
       {!activeChatId || !activeChat ? (
         <div className={"flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 select-none"}>
           <MessageSquare size={48} className={"text-slate-300 dark:text-slate-700 mb-4 animate-pulse"} />
-          <h2 className={"text-xl font-bold text-slate-800 dark:text-slate-200 mb-2"}>Mulai Belajar Sekarang</h2>
+          <h2 className={"text-base md:text-xl font-bold text-slate-800 dark:text-slate-200 mb-2"}>Mulai Belajar Sekarang</h2>
           <p className={"text-sm text-slate-500 max-w-sm leading-relaxed"}>
             Pilih salah satu riwayat obrolan di sidebar atau buat obrolan baru untuk mulai bertanya pada PintarAI.
           </p>
@@ -93,7 +93,7 @@ export const ChatArea: React.FC = () => {
                 <div className={"flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-100/30 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-900/30 mb-6"}>
                   <BookOpen size={32} className="text-emerald-500 dark:text-emerald-400" />
                 </div>
-                <h3 className={"text-lg font-bold text-slate-800 dark:text-slate-200 mb-2"}>
+                <h3 className={"text-base md:text-lg font-bold text-slate-800 dark:text-slate-200 mb-2"}>
                   {hasCurriculum 
                     ? `Tanyakan materi ${activeChat.subject} ${activeChat.grade}`
                     : "Tanyakan apa saja ke PintarAI"}
