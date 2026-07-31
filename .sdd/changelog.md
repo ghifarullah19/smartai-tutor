@@ -58,3 +58,16 @@ This document tracks all completed features, bug fixes, and refactoring efforts.
 **Summary of Changes:** 
 - **[BugFix] Responsive Viewport Height**: Mengganti `h-screen` dengan `h-[100dvh]` pada `AppShell` dan `App` untuk mencegah penumpukan/pemotongan navbar atas di berbagai perangkat (khususnya browser mobile).
 - **[BugFix] Z-Index Stacking Context Fix**: Menambahkan `relative z-30` pada `<header>` di `ChatArea` dan `z-10` pada `WelcomeForm` sehingga menu dropdown `ProfileMenu` (`z-50`) dipastikan berada di lapisan paling atas dan tidak tertimpa lagi oleh kartu "Selamat Datang di PintarAI".
+
+### [2026-07-31] - [Type: BugFix]
+**Task/Objective:** Fix Root Cause of Navbar Clipping on Mobile — Global CSS `overflow: hidden` & Nested Viewport Lock Conflicts
+**Files Modified:**
+- `frontend/src/index.css`
+- `frontend/src/pages/MainChatPage/MainChatPage.tsx`
+- `frontend/src/components/templates/AppShell/AppShell.tsx`
+- `frontend/src/components/organisms/Sidebar/Sidebar.tsx`
+**Summary of Changes:** 
+- **[BugFix] Remove Global `overflow: hidden`**: Menghapus `overflow: hidden` dari `html, body, #root` di `index.css` yang merupakan akar masalah utama pemotongan navbar. Properti ini memotong seluruh konten secara global sebelum Tailwind sempat bekerja. Diganti dengan `overflow-x: hidden` hanya pada `html` untuk mencegah scrollbar horizontal.
+- **[BugFix] Single Viewport Lock Strategy**: Menetapkan `MainChatPage` sebagai satu-satunya kontainer viewport-lock (`h-screen h-[100dvh] overflow-hidden`). `AppShell` diubah dari `h-screen` menjadi `h-full` agar mewarisi tinggi dari parent, menghilangkan konflik nested viewport locks yang bertabrakan.
+- **[BugFix] Sidebar Mobile Height**: Mengubah Sidebar dari `fixed top-0 bottom-0` menjadi `fixed inset-y-0 h-screen h-[100dvh]` saat posisi fixed (mobile), dan `md:h-full` saat relative (desktop) untuk konsistensi tinggi di semua perangkat.
+- **[BugFix] Dynamic Viewport Height (`dvh`)**: Menambahkan `height: 100dvh` pada `index.css` global sebagai override dari `height: 100%` untuk browser modern yang mendukung dynamic viewport units.

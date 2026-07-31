@@ -22,7 +22,7 @@ export const MainChatPage: React.FC = () => {
   }
 
   return (
-    <div className={"w-full h-full relative overflow-hidden"}>
+    <div className={"w-full h-screen h-[100dvh] relative overflow-hidden"}>
       <AppShell
         sidebar={<Sidebar />}
         content={<ChatArea />}
