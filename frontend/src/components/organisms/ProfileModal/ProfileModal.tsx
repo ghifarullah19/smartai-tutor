@@ -3,6 +3,7 @@ import { X, Save, Trash2, ShieldAlert } from 'lucide-react';
 import { useChatStore } from '../../../store/chatStore';
 import { useAuthStore } from '../../../store/authStore';
 import { Button } from '../../atoms/Button';
+import { API_URL } from '../../../config';
 
 export const ProfileModal: React.FC = () => {
   const { isProfileOpen, toggleProfile } = useChatStore();
@@ -34,7 +35,7 @@ export const ProfileModal: React.FC = () => {
       const payload: any = { name, email };
       if (password) payload.password = password;
 
-      const response = await fetch('http://localhost:5000/account', {
+      const response = await fetch(`${API_URL}/account`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ export const ProfileModal: React.FC = () => {
     );
     if (confirmDelete) {
       try {
-        const response = await fetch('http://localhost:5000/account', {
+        const response = await fetch(`${API_URL}/account`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`

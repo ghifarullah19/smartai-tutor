@@ -7,7 +7,7 @@ export const ProfileMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   
-  const { theme, setTheme, toggleSettings, toggleProfile } = useChatStore();
+  const { theme, setTheme, toggleSettings, toggleProfile, clearAllData } = useChatStore();
   const { logout } = useAuthStore();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -78,7 +78,10 @@ export const ProfileMenu: React.FC = () => {
             </button>
             <div className="border-t border-slate-200 dark:border-slate-800 my-1"></div>
             <button
-              onClick={() => handleAction(logout)}
+              onClick={() => handleAction(() => {
+                clearAllData();
+                logout();
+              })}
               className="flex items-center w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors font-medium"
             >
               <LogOut size={16} className="mr-3" />

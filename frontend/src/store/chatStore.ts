@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 import type { IChatSession, IMessage } from '../types/chat';
 import { useAuthStore } from './authStore';
-
-const BACKEND_URL = 'http://127.0.0.1:5000';
+import { API_URL as BACKEND_URL } from '../config';
 
 export interface IChatState {
   chats: IChatSession[];
@@ -334,11 +333,12 @@ export const useChatStore = create<IChatState>()((set, get) => ({
   toggleProfile: () => set((state) => ({ isProfileOpen: !state.isProfileOpen })),
 
   clearAllData: () => {
-    // Now we should probably call DELETE on all chats via API, but for simplicity:
-    get().chats.forEach(c => get().deleteChat(c.id));
     set({
+      chats: [],
       activeChatId: null,
       isSettingsOpen: false,
+      isProfileOpen: false,
+      isSidebarOpen: false,
     });
   },
 

@@ -8,12 +8,7 @@ import { ProfileModal } from '../../components/organisms/ProfileModal';
 import { SplashScreen } from '../../components/organisms/SplashScreen';
 
 export const MainChatPage: React.FC = () => {
-  const { chats, initUserId, createNewChat, isAppLoading } = useChatStore();
-
-  useEffect(() => {
-    // Inisialisasi ID Pengguna saat halaman dimuat
-    initUserId();
-  }, [initUserId]);
+  const { chats, createNewChat, isAppLoading } = useChatStore();
 
   useEffect(() => {
     // Jika tidak ada riwayat obrolan sama sekali, buat sesi obrolan baru secara otomatis
