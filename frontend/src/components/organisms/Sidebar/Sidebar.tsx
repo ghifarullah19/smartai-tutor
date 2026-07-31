@@ -22,7 +22,7 @@ export const Sidebar: React.FC = () => {
   );
 
   return (
-    <aside className={`${"fixed inset-y-0 left-0 h-screen h-[100dvh] z-40 flex flex-col w-[260px] bg-white/60 border-r border-slate-200/50 dark:bg-slate-950/60 dark:border-slate-800/50 backdrop-blur-2xl transform -translate-x-full md:translate-x-0 md:relative md:h-full md:bg-white/40 md:dark:bg-slate-950/40 transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.02)] dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)]"} ${isSidebarOpen ? "translate-x-0" : ''}`}>
+    <aside style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }} className={`${"fixed inset-y-0 left-0 h-full z-40 flex flex-col w-[260px] bg-white/60 border-r border-slate-200/50 dark:bg-slate-950/60 dark:border-slate-800/50 backdrop-blur-2xl transform -translate-x-full md:translate-x-0 md:relative md:h-full md:bg-white/40 md:dark:bg-slate-950/40 transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.02)] dark:shadow-[4px_0_24px_rgba(0,0,0,0.2)]"} ${isSidebarOpen ? "translate-x-0" : ''}`}>
       <div className={"flex items-center justify-between p-4 shrink-0"}>
         <Button onClick={createNewChat} variant="primary" className={"w-full justify-start py-2.5 px-4 text-sm font-medium"}>
           <Plus size={16} className="mr-2" />
